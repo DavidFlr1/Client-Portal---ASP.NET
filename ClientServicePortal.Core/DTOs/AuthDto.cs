@@ -1,9 +1,15 @@
+using System.ComponentModel.DataAnnotations;
 
 namespace ClientServicePortal.Core.DTOs
 {
   public class LoginDto
   {
+    [Required(ErrorMessage = "Username is required")]
+    [StringLength(100, MinimumLength = 3, ErrorMessage = "Username must be between 3 and 50 characters")]
     public required string Username { get; set; }
+    
+    [Required(ErrorMessage = "Password is required")]
+    [StringLength(100, MinimumLength = 6, ErrorMessage = "Password must be at least 6 characters")]
     public required string Password { get; set; }
   }
 
@@ -22,6 +28,10 @@ namespace ClientServicePortal.Core.DTOs
     public required string LastName { get; set; }
     public required string UserName { get; set; }
     public required string Email { get; set; }
+
+    [Required(ErrorMessage = "Password is required")]
+    [StringLength(100, MinimumLength = 8, ErrorMessage = "Password must be at least 8 characters")]
+    [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]", ErrorMessage = "Password must contain uppercase, lowercase, number and special character")]
     public required string Password { get; set; }
     public required string Role { get; set; } = "view";
     public string? PhoneNumber { get; set; }
@@ -36,5 +46,7 @@ namespace ClientServicePortal.Core.DTOs
     public string message { get; set; } = "";
   }
 
-  // Restablish account
+  // TODO: logout
+  // TODO: restablish account
+  // TODO: profile
 }

@@ -7,6 +7,7 @@ using System.Text;
 
 using ClientServicePortal.Core.Entities;
 using ClientServicePortal.Core.DTOs;
+using ClientServicePortal.Core.Interfaces;
 
 namespace ClientServicePortal.API.Controllers
 {
@@ -14,28 +15,34 @@ namespace ClientServicePortal.API.Controllers
   [Route("api/[controller]")]
   public class AuthController : ControllerBase
   {
-    private readonly UserManager<User> _userManager;
-    private readonly SignInManager<User> _signInManager;
+    private readonly IAuthRepository _authRepository;
     private readonly IConfiguration _configuration;
 
-    public AuthController(UserManager<User> userManager, SignInManager<User> signInManager, IConfiguration configuration)
+    public AuthController(IAuthRepository authRepository, IConfiguration configuration)
     {
-      _userManager = userManager;
-      _signInManager = signInManager;
+      _authRepository = authRepository;
       _configuration = configuration;
     }
 
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginDto model)
     {
+      if (!ModelState.IsValid)
+      {
+        return BadRequest(new { 
+          error = "Validation failed", 
+          details = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage) 
+        });
+      }
+
       try
       {
-        var user = await _userManager.FindByNameAsync(model.Username);
+        var user = await _authRepository.FindUserByUsernameAsync(model.Username);
         if (user == null)
           return Unauthorized("Invalid credentials");
 
-        var result = await _signInManager.CheckPasswordSignInAsync(user, model.Password, false);
-        if (!result.Succeeded)
+        var isValidPassword = await _authRepository.CheckPasswordAsync(user, model.Password);
+        if (!isValidPassword)
           return Unauthorized("Invalid credentials");
 
         var token = GenerateJwtToken(user);
@@ -58,9 +65,23 @@ namespace ClientServicePortal.API.Controllers
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] RegisterDto model)
     {
+      if (!ModelState.IsValid)
+      {
+        return BadRequest(new { 
+          error = "Validation failed", 
+          details = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage) 
+        });
+      }
+
       try
       {
-        var existingUser = await _userManager.FindByEmailAsync(model.Email);
+        // Input sanitization
+        model.FirstName = model.FirstName.Trim();
+        model.LastName = model.LastName.Trim();
+        model.UserName = model.UserName.Trim().ToLower();
+        model.Email = model.Email.Trim().ToLower();
+
+        var existingUser = await _authRepository.FindUserByEmailAsync(model.Email);
         if (existingUser != null)
           return BadRequest(new { error = "User with this email already exists" });
 
@@ -77,7 +98,7 @@ namespace ClientServicePortal.API.Controllers
           CreatedAt = model.CreatedAt
         };
 
-        var result = await _userManager.CreateAsync(user, model.Password);
+        var result = await _authRepository.CreateUserAsync(user, model.Password);
 
         if (!result.Succeeded)
         {
@@ -112,6 +133,7 @@ private string GenerateJwtToken(User user)
     new Claim(JwtRegisteredClaimNames.Sub, user.Id),
     new Claim(JwtRegisteredClaimNames.Email, user.Email!),
     new Claim(ClaimTypes.Name, user.UserName!),
+    new Claim(ClaimTypes.Role, user.Role),
     new Claim("FullName", user.FullName),
     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
   };

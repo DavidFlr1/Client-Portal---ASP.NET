@@ -7,20 +7,21 @@ A modern ASP.NET Core Web API for managing client services with Entity Framework
 ```
 ClientServicePortal/
 │── ClientServicePortal.API/             # ASP.NET Core Web API (controllers, startup, etc.)
-│   ├── Controllers/
-│   ├── Program.cs
+│   ├── Controllers/                     # HTTP Request
+│   ├── Program.cs                       # Provider
 │   ├── appsettings.json
 │
 │── ClientServicePortal.Core/            # Domain models + business logic
 │   ├── Entities/                        # C# classes = DB tables structure (Client.cs, Project.cs, etc.) 
-│   ├── DTOs/
-│   ├── Interfaces/
+│   ├── DTOs/                            # Plain request/response shape
+│   ├── Interfaces/                      # Available operations 
+│   ├── *Services/                       # Optional: To store interfaces and repositories together.
 │
 │── ClientServicePortal.Infrastructure/  # Data access (EF Core DbContext, Repos, SQL integration)
 │   ├── Data/
 │   │   ├── AppDbContext.cs              # EF Core context mapping tables
 │   │   ├── Configurations/              # Fluent API configs per entity
-│   ├── Repositories/
+│   ├── Repositories/                    # Operation access logic
 │
 │── sql/                                 # Raw SQL scripts
 │   ├── 01_create_database.sql
