@@ -1,18 +1,22 @@
-using ClientServicePortal.Core.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+
+using ClientServicePortal.Core.Entities;
 
 namespace ClientServicePortal.Infrastructure.Data
 {
-  public class AppDbContext : DbContext
+  public class AppDbContext : IdentityDbContext<User, IdentityRole, string>
   {
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
-    public DbSet<User> Users => Set<User>();
     public DbSet<ServiceRequest> ServiceRequests => Set<ServiceRequest>();
     public DbSet<Payment> Payments => Set<Payment>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+      base.OnModelCreating(modelBuilder);
+      
       modelBuilder.Entity<User>(e =>
       {
         e.Property(p => p.FullName).HasMaxLength(100);

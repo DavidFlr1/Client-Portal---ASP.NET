@@ -1,12 +1,9 @@
-using System;
-using System.Collections.Generic;
-
 namespace ClientServicePortal.Core.Entities
 {
   public class Payment
   {
     public int Id { get; set; }
-    public int UserId { get; set; }
+    public string UserId { get; set; } = "";
     public int? RequestId { get; set; }
 
     public decimal Amount { get; set; }

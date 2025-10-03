@@ -1,3 +1,30 @@
+-- Insert User
+CREATE PROCEDURE sp_insertUser
+  @UserName NVARCHAR(256),
+  @FirstName NVARCHAR(100),
+  @LastName NVARCHAR(100),
+  @Email NVARCHAR(100),
+  @PasswordHash NVARCHAR(MAX),
+  @Role NVARCHAR(20)
+AS
+BEGIN
+  DECLARE @UserId NVARCHAR(450) = NEWID()
+  
+  INSERT INTO AspNetUsers (
+    Id, UserName, NormalizedUserName, Email, NormalizedEmail, 
+    EmailConfirmed, PasswordHash, SecurityStamp, ConcurrencyStamp,
+    FirstName, LastName, FullName, Role, IsActive, CreatedAt,
+    AccessFailedCount, LockoutEnabled, TwoFactorEnabled, PhoneNumberConfirmed
+  )
+  VALUES (
+    @UserId, @UserName, UPPER(@UserName), @Email, UPPER(@Email),
+    0, @PasswordHash, NEWID(), NEWID(),
+    @FirstName, @LastName, @FirstName + ' ' + @LastName, @Role, 1, GETUTCDATE(),
+    0, 1, 0, 0
+  )
+END
+GO
+
 -- Crear un request
 CREATE PROCEDURE sp_CreateServiceRequest
     @UserId INT,

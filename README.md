@@ -12,7 +12,7 @@ ClientServicePortal/
 │   ├── appsettings.json
 │
 │── ClientServicePortal.Core/            # Domain models + business logic
-│   ├── Entities/                        # C# classes = DB tables (Client.cs, Project.cs, etc.)
+│   ├── Entities/                        # C# classes = DB tables structure (Client.cs, Project.cs, etc.) 
 │   ├── DTOs/
 │   ├── Interfaces/
 │
@@ -22,7 +22,7 @@ ClientServicePortal/
 │   │   ├── Configurations/              # Fluent API configs per entity
 │   ├── Repositories/
 │
-│── sql/                                 # ⬅️ All raw SQL scripts live here
+│── sql/                                 # Raw SQL scripts
 │   ├── 01_create_database.sql
 │   ├── 02_tables.sql
 │   ├── 03_stored_procedures.sql
