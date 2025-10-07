@@ -4,8 +4,11 @@ using Microsoft.IdentityModel.Tokens;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Text;
+
 using ClientServicePortal.Core.Entities;
+using ClientServicePortal.Core.Interfaces;
 using ClientServicePortal.Infrastructure.Data;
+using ClientServicePortal.Infrastructure.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +17,9 @@ var cs = builder.Configuration.GetConnectionString("DefaultConnection");
 
 // Add DB Context
 builder.Services.AddDbContext<AppDbContext>(opt => opt.UseSqlServer(cs));
+
+// Register the AuthRepository
+builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 
 // Add identity
 builder.Services.AddIdentity<User, IdentityRole>(options =>

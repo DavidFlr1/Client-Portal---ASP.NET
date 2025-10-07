@@ -138,6 +138,29 @@ dotnet ef database update \
 dotnet ./publish/ClientServicePortal.API.dll
 ```
 
+## API Workflow 
+1. Entity (if new table)
+
+Create entity in Core/Entities/
+Add DbSet<> to  AppDbContext
+Configure relationships in OnModelCreating()
+2. DTOs
+
+Request/Response DTOs in Core/DTOs/
+3. Interface (recommended for clean architecture)
+
+Define contract in Core/Interfaces/
+4. Repository (recommended)
+
+Implement interface in Infrastructure/Repositories/
+5. Controller
+
+Create controller in API/Controllers/
+6. Register in DI Container
+
+Add to Program.cs: builder.Services.AddScoped<IInterface, Implementation>()
+7. Migration (if entity changes)
+
 ## Security Notes
 
 - **Never commit sensitive data** to git

@@ -7,7 +7,7 @@ namespace ClientServicePortal.Core.DTOs
     [Required(ErrorMessage = "Username is required")]
     [StringLength(100, MinimumLength = 3, ErrorMessage = "Username must be between 3 and 50 characters")]
     public required string Username { get; set; }
-    
+
     [Required(ErrorMessage = "Password is required")]
     [StringLength(100, MinimumLength = 6, ErrorMessage = "Password must be at least 6 characters")]
     public required string Password { get; set; }
@@ -46,6 +46,7 @@ namespace ClientServicePortal.Core.DTOs
     public string message { get; set; } = "";
   }
 
+  // TODO: refresh token
   // TODO: logout
   // TODO: restablish account
   // TODO: profile

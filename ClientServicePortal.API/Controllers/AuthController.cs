@@ -121,32 +121,32 @@ namespace ClientServicePortal.API.Controllers
       }
     }
 
-private string GenerateJwtToken(User user)
-{
-  var jwtSettings = _configuration.GetSection("JwtSettings");
-  var secretKey = jwtSettings["SecretKey"]!;
-  var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
-  var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+    private string GenerateJwtToken(User user)
+    {
+      var jwtSettings = _configuration.GetSection("JwtSettings");
+      var secretKey = jwtSettings["SecretKey"]!;
+      var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
+      var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-  var claims = new[]
-  {
-    new Claim(JwtRegisteredClaimNames.Sub, user.Id),
-    new Claim(JwtRegisteredClaimNames.Email, user.Email!),
-    new Claim(ClaimTypes.Name, user.UserName!),
-    new Claim(ClaimTypes.Role, user.Role),
-    new Claim("FullName", user.FullName),
-    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
-  };
+      var claims = new[]
+      {
+        new Claim(JwtRegisteredClaimNames.Sub, user.Id),
+        new Claim(JwtRegisteredClaimNames.Email, user.Email!),
+        new Claim(ClaimTypes.Name, user.UserName!),
+        new Claim(ClaimTypes.Role, user.Role),
+        new Claim("FullName", user.FullName),
+        new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+      };
 
-  var token = new JwtSecurityToken(
-    issuer: jwtSettings["Issuer"],
-    audience: jwtSettings["Audience"],
-    claims: claims,
-    expires: DateTime.UtcNow.AddMinutes(60),
-    signingCredentials: creds
-  );
+      var token = new JwtSecurityToken(
+        issuer: jwtSettings["Issuer"],
+        audience: jwtSettings["Audience"],
+        claims: claims,
+        expires: DateTime.UtcNow.AddMinutes(60),
+        signingCredentials: creds
+      );
 
-  return new JwtSecurityTokenHandler().WriteToken(token);
-}
+      return new JwtSecurityTokenHandler().WriteToken(token);
+    }
   }
 }
