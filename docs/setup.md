@@ -1,4 +1,4 @@
-# Setup .net project
+# Setup .net project Backend
 
 ## Structure. setup
   ```bash
@@ -90,7 +90,10 @@
   ```
 # Run the API
 ```bash
+# Run the API
 dotnet run --project ClientServicePortal.API
+# or
+dotnet watch --project ClientServicePortal.API
 ```
 
 # Perform Check
@@ -99,8 +102,22 @@ dotnet run --project ClientServicePortal.API
 GET http://localhost:5264/health or https://localhost:7129/health
 ```
 
-# Miscellaneous
+# Setup frontend
 ```bash
-# Swagger connection
-http://localhost:5264/swagger
+# From your solution root
+dotnet new webapp -n ClientServicePortal.Web
+dotnet sln add ClientServicePortal.Web
 ```
+
+```bash
+# Run the frontend
+dotnet run --project ClientServicePortal.Web
+# or
+dotnet watch --project ClientServicePortal.Web
+```
+
+# Miscellaneous
+Login page: http://localhost:5166/Auth/Login
+API health: http://localhost:5264/health
+API Swagger: http://localhost:5264/swagger
+

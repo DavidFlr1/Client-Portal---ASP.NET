@@ -1,0 +1,39 @@
+@page
+@model ClientServicePortal.Web.Pages.Auth.LoginModel
+@{
+  ViewData["Title"] = "Login";
+}
+
+<div class="login-container">
+  <div class="card">
+    <div class="card-header">
+      <h4 class="mb-0">Login</h4>
+    </div>
+    <div class="card-body">
+      <form id="loginForm">
+        <div class="mb-3">
+          <label asp-for="Input.Username" class="form-label"></label>
+          <input asp-for="Input.Username" class="form-control" id="username" />
+          <span asp-validation-for="Input.Username" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+          <label asp-for="Input.Password" class="form-label"></label>
+          <input asp-for="Input.Password" class="form-control" id="password" />
+          <span asp-validation-for="Input.Password" class="text-danger"></span>
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100" id="loginBtn">
+          <span class="loading spinner-border spinner-border-sm me-2" role="status"></span>
+          Login
+        </button>
+      </form>
+
+      <div id="alertContainer"></div>
+    </div>
+  </div>
+</div>
+
+@section Scripts {
+  <script src="~/js/auth.js"></script>
+}
