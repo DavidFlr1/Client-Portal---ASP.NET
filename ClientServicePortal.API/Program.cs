@@ -18,8 +18,9 @@ var cs = builder.Configuration.GetConnectionString("DefaultConnection");
 // Add DB Context
 builder.Services.AddDbContext<AppDbContext>(opt => opt.UseSqlServer(cs));
 
-// Register the AuthRepository
+// Register repositories
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 // Add identity
 builder.Services.AddIdentity<User, IdentityRole>(options =>
