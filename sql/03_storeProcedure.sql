@@ -25,15 +25,17 @@ BEGIN
 END
 GO
 
--- Crear un request
-CREATE PROCEDURE sp_CreateServiceRequest
-    @UserId INT,
+-- Create a service request
+CREATE OR ALTER PROCEDURE sp_CreateServiceRequest
+    @UserId NVARCHAR(450),
     @Title NVARCHAR(150),
     @Description NVARCHAR(MAX)
 AS
 BEGIN
-    INSERT INTO ServiceRequests (UserId, Title, Description)
-    VALUES (@UserId, @Title, @Description)
+    INSERT INTO ServiceRequests (UserId, Title, Description, Status, CreatedAt)
+    VALUES (@UserId, @Title, @Description, 'Pending', GETUTCDATE())
+    
+    SELECT SCOPE_IDENTITY() as Id, @Title as Title, 'Pending' as Status, GETUTCDATE() as CreatedAt
 END
 GO
 

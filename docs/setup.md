@@ -88,6 +88,12 @@
     --project ClientServicePortal.Infrastructure \
     --startup-project ClientServicePortal.API
   ```
+  ## Informative: Execute SQL files manually
+  ```bash
+  # Connect to your SQL Server and run the file
+  sqlcmd -S localhost,1433 -U sa -P admin123! -d ClientServicePortal -i sql/03_storeProcedure.sql
+  ```
+  
 # Run the API
 ```bash
 # Run the API
